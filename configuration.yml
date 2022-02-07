@@ -1,0 +1,7 @@
+application_port: 8000
+database:
+  port: 3306
+  host: "127.0.0.1"
+  username: mysql
+  password: password
+  database_name: testing

@@ -19,6 +19,13 @@ impl DatabaseSettings {
             self.username, self.password, self.host, self.port, self.database_name
         )
     }
+
+    pub fn as_connection_string_without_db(&self) -> String {
+        format!(
+            "mysql://{}:{}@{}:{}",
+            self.username, self.password, self.host, self.port
+        )
+    }
 }
 
 pub fn source_configuration() -> Result<Settings, config::ConfigError> {

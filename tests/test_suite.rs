@@ -1,9 +1,9 @@
+use miso_backend::{configuration::DatabaseSettings, startup::run};
+use names::Generator;
 use std::net::TcpListener;
 
-use miso_backend::startup::run;
-
 use miso_backend::configuration::source_configuration;
-use sqlx::MySqlPool;
+use sqlx::{Connection, Executor, MySqlConnection, MySqlPool};
 
 struct TestApp {
     pub address: String,
@@ -25,7 +25,7 @@ async fn health_check_works() {
 }
 
 #[tokio::test]
-async fn subscribe_400_if_data_missing() {
+async fn subscribe_returns_400_with_invalid_data() {
     let app = spawn_app().await;
     let client = reqwest::Client::new();
 
@@ -51,7 +51,7 @@ async fn subscribe_400_if_data_missing() {
     }
 }
 #[tokio::test]
-async fn subscribe_200_with_valid_data() {
+async fn subscribe_returns_200_and_adds_data_to_table() {
     let app = spawn_app().await;
     let client = reqwest::Client::new();
 
@@ -77,11 +77,11 @@ async fn subscribe_200_with_valid_data() {
 }
 
 async fn spawn_app() -> TestApp {
+    let mut name_generator = Generator::default();
+    let mut configuration = source_configuration().expect("Failed to read configuration");
+    configuration.database.database_name = name_generator.next().unwrap();
+    let connection_pool = configure_database(&configuration.database).await;
     let listener = TcpListener::bind("127.0.0.1:0").expect("Failed to bind address");
-    let configuration = source_configuration().expect("Failed to read configuration");
-    let connection_pool = MySqlPool::connect(&configuration.database.as_connection_string())
-        .await
-        .expect("Failed to connect to database");
     let port = listener.local_addr().unwrap().port();
     let server = run(listener, connection_pool.clone()).expect("Failed to run server");
     let _ = tokio::spawn(server);
@@ -89,4 +89,23 @@ async fn spawn_app() -> TestApp {
         address: format!("127.0.0.1:{port}"),
         db_pool: connection_pool,
     }
+}
+
+async fn configure_database(config: &DatabaseSettings) -> MySqlPool {
+    let mut connection = MySqlConnection::connect(&config.as_connection_string_without_db())
+        .await
+        .expect("Failed to connect to MySql");
+    connection
+        .execute(format!("CREATE DATABASE `{}`", config.database_name).as_str())
+        .await
+        .expect("Failed to create database");
+
+    let connection_pool = MySqlPool::connect(&config.as_connection_string())
+        .await
+        .expect("Failed to connect to database");
+    sqlx::migrate!("./migrations")
+        .run(&connection_pool)
+        .await
+        .expect("Failed to migrate the database");
+    connection_pool
 }

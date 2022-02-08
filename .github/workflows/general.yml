@@ -15,7 +15,7 @@ jobs:
         env:
           DB_USER: mysql
           DB_PASSWORD: password
-          DB_NAME: postgres
+          DB_NAME: test
         ports:
           - 3306:3306
     env:
@@ -93,7 +93,7 @@ jobs:
         env:
           DB_USER: mysql
           DB_PASSWORD: password
-          DB_NAME: postgres
+          DB_NAME: test
         ports:
           - 3306:3306
     env:
@@ -149,7 +149,7 @@ jobs:
         env:
           DB_USER: mysql
           DB_PASSWORD: password
-          DB_NAME: postgres
+          DB_NAME: test
         ports:
           - 3306:3306
     env:

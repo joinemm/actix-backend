@@ -15,7 +15,7 @@ jobs:
         env:
           MARIADB_PASSWORD: password
           MARIADB_ROOT_PASSWORD: password
-          MARIADB_NAME: testing
+          MARIADB_DATABASE: testing
         ports:
           - 3306:3306
     env:
@@ -93,7 +93,7 @@ jobs:
         env:
           MARIADB_PASSWORD: password
           MARIADB_ROOT_PASSWORD: password
-          MARIADB_NAME: testing
+          MARIADB_DATABASE: testing
         ports:
           - 3306:3306
     env:
@@ -149,7 +149,7 @@ jobs:
         env:
           MARIADB_PASSWORD: password
           MARIADB_ROOT_PASSWORD: password
-          MARIADB_NAME: testing
+          MARIADB_DATABASE: testing
         ports:
           - 3306:3306
     env:

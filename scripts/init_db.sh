@@ -13,8 +13,8 @@ if ! [ -x "$(command -v sqlx)" ]; then
 	exit 1
 fi
 
-# Check if a custom user has been set, otherwise default to 'mysql'
-DB_USER=${DB_USER:=root}
+# Check if a custom user has been set, otherwise default to root
+DB_USER=${DB_USER}
 # Check if a custom password has been set, otherwise default to 'password'
 DB_PASSWORD="${DB_PASSWORD:=password}"
 # Check if a custom database name has been set, otherwise default to 'testing'

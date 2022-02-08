@@ -13,9 +13,9 @@ jobs:
       mariadb:
         image: mariadb
         env:
-          DB_USER: mysql
+          DB_USER: root
           DB_PASSWORD: password
-          DB_NAME: test
+          DB_NAME: testing
         ports:
           - 3306:3306
     env:
@@ -91,9 +91,9 @@ jobs:
       mariadb:
         image: mariadb
         env:
-          DB_USER: mysql
+          DB_USER: root
           DB_PASSWORD: password
-          DB_NAME: test
+          DB_NAME: testing
         ports:
           - 3306:3306
     env:
@@ -147,9 +147,9 @@ jobs:
       mariadb:
         image: mariadb
         env:
-          DB_USER: mysql
+          DB_USER: root
           DB_PASSWORD: password
-          DB_NAME: test
+          DB_NAME: testing
         ports:
           - 3306:3306
     env:

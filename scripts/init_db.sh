@@ -14,7 +14,7 @@ if ! [ -x "$(command -v sqlx)" ]; then
 fi
 
 # Check if a custom user has been set, otherwise default to root
-DB_USER=${DB_USER}
+DB_USER=${DB_USER:=root}
 # Check if a custom password has been set, otherwise default to 'password'
 DB_PASSWORD="${DB_PASSWORD:=password}"
 # Check if a custom database name has been set, otherwise default to 'testing'
@@ -25,7 +25,6 @@ DB_PORT="${DB_PORT:=3306}"
 if [[ -z ${SKIP_DOCKER} ]]; then
 	# Launch mariadb using Docker
 	docker run -d \
-		-e MARIADB_USER=${DB_USER} \
 		-e MARIADB_PASSWORD=${DB_PASSWORD} \
 		-e MARIADB_DATABASE=${DB_NAME} \
 		-e MARIADB_ROOT_PASSWORD=password \
